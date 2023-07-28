@@ -3,14 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.vhd.controllers;
+package com.vhd.controller;
 
-import com.dht.pojo.Category;
-import com.dht.pojo.Product;
+import com.vhd.pojo.Category;
+import com.vhd.pojo.Product;
+import com.vhd.service.CategoryService;
+import com.vhd.service.ProductService;
 import java.util.List;
+import java.util.Map;
+import javax.persistence.Query;
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -18,15 +28,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class IndexController {
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private Environment env;
+
     @RequestMapping("/")
-    public String index(Model model){
-        List<Category> cates = List.of(new Category(1, "Mobile"), new Category(2, "Tablet"), new Category(3, "Desktops"));
-        model.addAttribute("categories", cates);
+    public String index(Model model, @RequestParam Map<String, String> params) {
+
+        model.addAttribute("categories", this.categoryService.getCategories());
+        model.addAttribute("products", this.productService.getProducts(params));
+        int count = this.productService.countProducts();
+        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        model.addAttribute("pages", Math.ceil(count * 1.0 / pageSize));
         
-        List<Product> products = List.of(new Product(1, "Iphone13", 13000000l, ""), 
-                                        new Product(2, "Iphone14", 15000000l, ""),
-                                        new Product(3, "Iphone15", 18000000l, ""));
-        model.addAttribute("products", products);
         return "index";
     }
 }

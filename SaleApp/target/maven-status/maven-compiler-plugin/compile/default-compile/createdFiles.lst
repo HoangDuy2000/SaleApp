@@ -1,3 +1,11 @@
+com\vhd\pojo\User.class
+com\vhd\pojo\Product.class
+com\vhd\pojo\ProdTag.class
 com\vhd\configs\WebAppContextConfig.class
-com\vhd\controllers\IndexController.class
+com\vhd\pojo\OrderDetail.class
 com\vhd\configs\DispatcherServletInit.class
+com\vhd\pojo\Category.class
+com\vhd\pojo\Tag.class
+com\vhd\pojo\SaleOrder.class
+com\vhd\controller\IndexController.class
+com\vhd\configs\HibernateConfig.class
